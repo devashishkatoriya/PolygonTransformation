@@ -362,7 +362,9 @@ void polygon::Xshear()
 	cleardevice();
 	for(i=0;i<n;i++)
 	{
-		Px[i] = int(Px[i] + (Shx*Px[i]));
+        Px[i] = Px[i] - 320;
+		Px[i] = int(Px[i] + (Shx*Py[i]));
+        Px[i] = Px[i] + 320;
 	}
 	b.drawline(0,240,640,240);
 	b.drawline(320,0,320,480);
@@ -382,7 +384,9 @@ void polygon::Yshear()
 	cleardevice();
 	for(i=0;i<n;i++)
 	{
-		Py[i] = int(Py[i] + (Shy*Py[i]));
+        Py[i] = Py[i] - 240;
+		Py[i] = int(Py[i] + (Shy*Px[i]));
+        Py[i] = Py[i] + 240;
 	}
 	b.drawline(0,240,640,240);
 	b.drawline(320,0,320,480);

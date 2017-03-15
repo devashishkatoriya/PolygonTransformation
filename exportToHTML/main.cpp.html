@@ -383,7 +383,9 @@ main.cpp</FONT>
     cleardevice(); 
     </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
     { 
-        Px[i] = </span><span class="s4">int</span><span class="s1">(Px[i] + (Shx*Px[i])); 
+        Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+        Px[i] = </span><span class="s4">int</span><span class="s1">(Px[i] + (Shx*Py[i])); 
+        Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
     } 
     b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
     b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
@@ -403,7 +405,9 @@ main.cpp</FONT>
     cleardevice(); 
     </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
     { 
-        Py[i] = </span><span class="s4">int</span><span class="s1">(Py[i] + (Shy*Py[i])); 
+        Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+        Py[i] = </span><span class="s4">int</span><span class="s1">(Py[i] + (Shy*Px[i])); 
+        Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
     } 
     b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
     b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
