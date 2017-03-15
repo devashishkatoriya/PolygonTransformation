@@ -1,0 +1,576 @@
+<html>
+<head>
+<title>main.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(128,128,128); font-style: italic; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,0); }
+.s3 { color: rgb(0,128,0); font-weight: bold; }
+.s4 { color: rgb(0,0,128); font-weight: bold; }
+.s5 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+main.cpp</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">/* 
+ * 2D - Transformations on Polygon 
+ * 
+ *  Created on: 15-Feb-2017 
+ *      Author: Devashish Katoriya 
+ */</span><span class="s1"> 
+ 
+</span><span class="s2">#include</span><span class="s3">&lt;graphics.h&gt;</span><span class="s1"> 
+</span><span class="s2">#include</span><span class="s3">&lt;iostream&gt;</span><span class="s1"> 
+ 
+</span><span class="s4">using namespace </span><span class="s1">std; 
+ 
+</span><span class="s2">#define </span><span class="s1">LIMIT </span><span class="s5">50</span><span class="s1"> 
+</span><span class="s2">#define </span><span class="s1">pi </span><span class="s5">3.1415926535</span><span class="s1"> 
+ 
+</span><span class="s4">class </span><span class="s1">Pixel 
+{ 
+</span><span class="s4">public </span><span class="s1">: 
+    </span><span class="s4">void </span><span class="s1">setPixel(</span><span class="s4">double </span><span class="s1">x, </span><span class="s4">double </span><span class="s1">y, </span><span class="s4">int </span><span class="s1">colour) 
+    { 
+        putpixel(</span><span class="s4">int</span><span class="s1">(x),</span><span class="s4">int</span><span class="s1">(y),colour); 
+        </span><span class="s0">//delay(5);</span><span class="s1"> 
+    } 
+}; 
+ 
+</span><span class="s4">class </span><span class="s1">Bresenhem:</span><span class="s4">private </span><span class="s1">Pixel                           </span><span class="s0">//Bresenhem Class</span><span class="s1"> 
+{ 
+</span><span class="s4">public </span><span class="s1">: 
+    </span><span class="s4">void </span><span class="s1">drawline(</span><span class="s4">int</span><span class="s1">,</span><span class="s4">int</span><span class="s1">,</span><span class="s4">int</span><span class="s1">,</span><span class="s4">int</span><span class="s1">); 
+}; 
+ 
+</span><span class="s4">void </span><span class="s1">Bresenhem::drawline(</span><span class="s4">int </span><span class="s1">x1,</span><span class="s4">int </span><span class="s1">y1,</span><span class="s4">int </span><span class="s1">x2,</span><span class="s4">int </span><span class="s1">y2) 
+{ 
+    </span><span class="s4">int </span><span class="s1">temp; 
+    </span><span class="s4">if</span><span class="s1">(x1&gt;x2) 
+    { 
+        temp = x1; 
+        x1 = x2; 
+        x2 = temp; 
+ 
+        temp = y1; 
+        y1 = y2; 
+        y2 = temp; 
+    } 
+    </span><span class="s4">double </span><span class="s1">Dx,Dy,length,Xn,Yn,x,y; 
+    </span><span class="s0">//DDA Algorithm</span><span class="s1"> 
+    Dx = x2-x1; 
+    Dy = y2-y1; 
+ 
+    </span><span class="s4">if</span><span class="s1">(Dx&gt;Dy) 
+        length = Dx; 
+    </span><span class="s4">else</span><span class="s1"> 
+        length = Dy; 
+    Xn = Dx/length; 
+    Yn = Dy/length; 
+    x = x1; 
+    y = y1; 
+    setPixel(x, y, WHITE); 
+    </span><span class="s4">for</span><span class="s1">(</span><span class="s4">int </span><span class="s1">i=</span><span class="s5">1</span><span class="s1">;i&lt;length;i++) 
+    { 
+        x = x + Xn; 
+        y = y + Yn; 
+        setPixel(floor(x), floor(y), WHITE); 
+    } 
+} 
+ 
+</span><span class="s4">class </span><span class="s1">polygon 
+{ 
+    </span><span class="s4">int </span><span class="s1">Px[LIMIT],Py[LIMIT],n,flag; 
+</span><span class="s4">public </span><span class="s1">: 
+    polygon() 
+    { 
+        n = </span><span class="s5">0</span><span class="s1">; 
+        flag = </span><span class="s5">0</span><span class="s1">; 
+    } 
+    </span><span class="s4">void </span><span class="s1">setFlag() 
+    { 
+        flag = </span><span class="s5">1</span><span class="s1">; 
+    } 
+    </span><span class="s4">void </span><span class="s1">clrFlag() 
+    { 
+        flag = </span><span class="s5">0</span><span class="s1">; 
+    } 
+    </span><span class="s4">void </span><span class="s1">fill(); 
+    </span><span class="s4">void </span><span class="s1">translate(); 
+    </span><span class="s4">void </span><span class="s1">scale(); 
+    </span><span class="s4">void </span><span class="s1">rotate(); 
+    </span><span class="s4">void </span><span class="s1">draw(); 
+    </span><span class="s4">void </span><span class="s1">read(); 
+    </span><span class="s4">void </span><span class="s1">Xshear(); 
+    </span><span class="s4">void </span><span class="s1">Yshear(); 
+    </span><span class="s4">void </span><span class="s1">reflect(); 
+    </span><span class="s4">void operator </span><span class="s1">+(</span><span class="s4">int </span><span class="s1">P) 
+    { 
+        Bresenhem b; 
+            </span><span class="s4">int </span><span class="s1">Tx,Ty,i; 
+ 
+            Tx = Ty = P; 
+            </span><span class="s0">/* 
+            cout&lt;&lt;&quot;\nEnter translation factor :- \n&quot;; 
+            cin&gt;&gt;Tx&gt;&gt;Ty; 
+            */</span><span class="s1"> 
+            Tx = Tx/</span><span class="s5">2</span><span class="s1">; 
+            Ty = Ty/</span><span class="s5">2</span><span class="s1">; 
+ 
+            cleardevice(); 
+            </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+            { 
+                Px[i] = Px[i] + Tx; 
+                Py[i] = Py[i] + Ty; 
+            } 
+            b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+            b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+            draw(); 
+    } 
+}; 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::read() 
+{ 
+    </span><span class="s4">int </span><span class="s1">i; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter how many vertices ? &quot;</span><span class="s1">; 
+    cin&gt;&gt;n; 
+    </span><span class="s4">if</span><span class="s1">(n&lt;</span><span class="s5">3</span><span class="s1">) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Please enter Number of Sides!&quot;</span><span class="s1">; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter the vertices :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+        cin&gt;&gt;Px[i]; 
+        </span><span class="s4">if</span><span class="s1">(Px[i]&lt;-</span><span class="s5">640</span><span class="s1">||Px[i]&gt;</span><span class="s5">640</span><span class="s1">) 
+        { 
+            cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Please enter Valid coordinates!&quot;</span><span class="s1">; 
+            cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">640x480&quot;</span><span class="s1">; 
+            </span><span class="s4">return</span><span class="s1">; 
+        } 
+        cin&gt;&gt;Py[i]; 
+        </span><span class="s4">if</span><span class="s1">(Py[i]&lt;-</span><span class="s5">480</span><span class="s1">||Py[i]&gt;</span><span class="s5">480</span><span class="s1">) 
+        { 
+            cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Please enter Valid coordinates!&quot;</span><span class="s1">; 
+            cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">640x480&quot;</span><span class="s1">; 
+            </span><span class="s4">return</span><span class="s1">; 
+        } 
+        Px[i] = (Px[i]/</span><span class="s5">2</span><span class="s1">) + </span><span class="s5">320</span><span class="s1">; 
+        Py[i] = (Py[i]/</span><span class="s5">2</span><span class="s1">) + </span><span class="s5">240</span><span class="s1">; 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::draw() 
+{ 
+    </span><span class="s4">int </span><span class="s1">i; 
+ 
+    </span><span class="s4">if</span><span class="s1">(n&lt;</span><span class="s5">3</span><span class="s1">) 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Polygon!&quot;</span><span class="s1">; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+ 
+    </span><span class="s0">//line(Px[0],Py[0],Py[1],Py[1]);</span><span class="s1"> 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n-</span><span class="s5">1</span><span class="s1">;i++) 
+    { 
+        line(Px[i],Py[i],Px[i+</span><span class="s5">1</span><span class="s1">],Py[i+</span><span class="s5">1</span><span class="s1">]); 
+    } 
+    line(Px[</span><span class="s5">0</span><span class="s1">],Py[</span><span class="s5">0</span><span class="s1">],Px[n-</span><span class="s5">1</span><span class="s1">],Py[n-</span><span class="s5">1</span><span class="s1">]); 
+    </span><span class="s4">if</span><span class="s1">(flag == </span><span class="s5">1</span><span class="s1">) 
+        fill(); 
+} 
+ 
+</span><span class="s0">//scanline fill algorithm</span><span class="s1"> 
+</span><span class="s4">void </span><span class="s1">polygon::fill() 
+{ 
+    setFlag(); 
+ 
+    </span><span class="s4">int </span><span class="s1">i,k,inter_x[LIMIT],temp,y,Ymax = -</span><span class="s5">480</span><span class="s1">,Ymin = </span><span class="s5">480</span><span class="s1">; 
+    </span><span class="s4">float </span><span class="s1">m[LIMIT],dx,dy; 
+ 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        </span><span class="s4">if</span><span class="s1">(Py[i]&gt;=Ymax) 
+            Ymax = Py[i]; 
+        </span><span class="s4">if</span><span class="s1">(Py[i]&lt;=Ymin) 
+            Ymin = Py[i]; 
+    } 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n-</span><span class="s5">1</span><span class="s1">;i++) 
+    { 
+        dx = Px[i+</span><span class="s5">1</span><span class="s1">] - Px[i]; 
+        dy = Py[i+</span><span class="s5">1</span><span class="s1">] - Py[i]; 
+ 
+        </span><span class="s4">if</span><span class="s1">(dx==</span><span class="s5">0</span><span class="s1">) 
+            m[i] = </span><span class="s5">0</span><span class="s1">; 
+        </span><span class="s4">if</span><span class="s1">(dy==</span><span class="s5">0</span><span class="s1">) 
+            m[i] = </span><span class="s5">1</span><span class="s1">; 
+        </span><span class="s4">if</span><span class="s1">((dx!=</span><span class="s5">0</span><span class="s1">) &amp;&amp; (dy!=</span><span class="s5">0</span><span class="s1">)) 
+            m[i] = dx/dy; 
+    } 
+    dx = Px[n-</span><span class="s5">1</span><span class="s1">] - Px[</span><span class="s5">0</span><span class="s1">]; 
+    dy = Py[n-</span><span class="s5">1</span><span class="s1">] - Py[</span><span class="s5">0</span><span class="s1">]; 
+ 
+    </span><span class="s4">if</span><span class="s1">(dx==</span><span class="s5">0</span><span class="s1">) 
+        m[n-</span><span class="s5">1</span><span class="s1">] = </span><span class="s5">0</span><span class="s1">; 
+    </span><span class="s4">if</span><span class="s1">(dy==</span><span class="s5">0</span><span class="s1">) 
+        m[n-</span><span class="s5">1</span><span class="s1">] = </span><span class="s5">1</span><span class="s1">; 
+    </span><span class="s4">if</span><span class="s1">((dx!=</span><span class="s5">0</span><span class="s1">) &amp;&amp; (dy!=</span><span class="s5">0</span><span class="s1">)) 
+        m[n-</span><span class="s5">1</span><span class="s1">] = dx/dy; 
+ 
+    </span><span class="s4">for</span><span class="s1">(y=Ymax;y&gt;=Ymin;y--) 
+    { 
+        </span><span class="s4">int </span><span class="s1">cnt = </span><span class="s5">0</span><span class="s1">; 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            </span><span class="s4">if</span><span class="s1">(((Py[i]&gt;y) &amp;&amp; (Py[i+</span><span class="s5">1</span><span class="s1">]&lt;=y))||((Py[i]&lt;=y) &amp;&amp; (Py[i+</span><span class="s5">1</span><span class="s1">]&gt;y))) 
+            { 
+                inter_x[cnt] = </span><span class="s4">int</span><span class="s1">(Px[i] + (m[i]*(y-Py[i]))); 
+                cnt++; 
+            } 
+        } 
+        </span><span class="s4">for</span><span class="s1">(k=</span><span class="s5">0</span><span class="s1">;k&lt;cnt;k++) 
+        { 
+            </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;cnt-</span><span class="s5">1</span><span class="s1">;i++) 
+            { 
+                </span><span class="s4">if</span><span class="s1">(inter_x[i]&gt;inter_x[i+</span><span class="s5">1</span><span class="s1">]) 
+                { 
+                    temp = inter_x[i]; 
+                    inter_x[i] = inter_x[i+</span><span class="s5">1</span><span class="s1">]; 
+                    inter_x[i+</span><span class="s5">1</span><span class="s1">] = temp; 
+                } 
+            } 
+        } 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;cnt-</span><span class="s5">1</span><span class="s1">;i++) 
+        { 
+            line(inter_x[i],y,inter_x[i+</span><span class="s5">1</span><span class="s1">],y); 
+            delay(</span><span class="s5">10</span><span class="s1">); 
+        } 
+    } 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::translate() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">int </span><span class="s1">Tx,Ty,i; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter translation factor :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+    cin&gt;&gt;Tx&gt;&gt;Ty; 
+ 
+    Tx = Tx/</span><span class="s5">2</span><span class="s1">; 
+    Ty = Ty/</span><span class="s5">2</span><span class="s1">; 
+ 
+    cleardevice(); 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        Px[i] = Px[i] + Tx; 
+        Py[i] = Py[i] + Ty; 
+    } 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::scale() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">int </span><span class="s1">i; 
+    </span><span class="s4">float </span><span class="s1">Sx,Sy; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Scaling factor :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+    cin&gt;&gt;Sx&gt;&gt;Sy; 
+ 
+    cleardevice(); 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        Px[i] = </span><span class="s4">int</span><span class="s1">(((Px[i]-</span><span class="s5">320</span><span class="s1">) * Sx) + </span><span class="s5">320</span><span class="s1">); 
+        Py[i] = </span><span class="s4">int</span><span class="s1">(((Py[i]-</span><span class="s5">240</span><span class="s1">) * Sy) + </span><span class="s5">240</span><span class="s1">); 
+    } 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::rotate() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">int </span><span class="s1">i,temp,temp2; 
+    </span><span class="s4">float </span><span class="s1">theta; 
+    </span><span class="s4">char </span><span class="s1">choice; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Angle of rotation (in deg.): &quot;</span><span class="s1">; 
+    cin&gt;&gt;theta; 
+    theta = (theta*pi)/</span><span class="s5">180</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Counter-clockwise or Clockwise ? &quot;</span><span class="s1">; 
+    cin&gt;&gt;choice; 
+ 
+    </span><span class="s4">if</span><span class="s1">(choice == </span><span class="s3">'l'</span><span class="s1">||choice == </span><span class="s3">'L'</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+        } 
+        temp = Px[</span><span class="s5">0</span><span class="s1">]; 
+        temp2 = Py[</span><span class="s5">0</span><span class="s1">]; 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - temp; 
+            Py[i] = Py[i] - temp2; 
+ 
+ 
+            Px[i] = (Px[i]*cos(theta)) - (Py[i]*sin(theta)); 
+            Py[i] = (Px[i]*sin(theta)) + (Py[i]*cos(theta)); 
+ 
+            Px[i] = Px[i] + temp; 
+            Py[i] = Py[i] + temp2; 
+ 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s4">else if</span><span class="s1">(choice == </span><span class="s3">'r'</span><span class="s1">||choice == </span><span class="s3">'R'</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+        } 
+ 
+        temp = Px[</span><span class="s5">0</span><span class="s1">]; 
+        temp2 = Py[</span><span class="s5">0</span><span class="s1">]; 
+ 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - temp; 
+            Py[i] = Py[i] - temp2; 
+ 
+            Px[i] = (Px[i]*cos(theta)) + (Py[i]*sin(theta)); 
+            Py[i] = (Px[i]*sin(theta)) - (Py[i]*cos(theta)); 
+ 
+            Px[i] = Px[i] + temp; 
+            Py[i] = Py[i] + temp2; 
+ 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Rotation!&quot;</span><span class="s1">; 
+    } 
+    cleardevice(); 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::Xshear() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">float </span><span class="s1">Shx,Shy; 
+    </span><span class="s4">int </span><span class="s1">i; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter X-Shear factor :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+    cin&gt;&gt;Shx; 
+ 
+    Shx = Shx/</span><span class="s5">2</span><span class="s1">; 
+ 
+    cleardevice(); 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        Px[i] = Px[i] + (Shx*Px[i]); 
+    } 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::Yshear() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">float </span><span class="s1">Shy; 
+    </span><span class="s4">int </span><span class="s1">i; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Y-Shear factor :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+    cin&gt;&gt;Shy; 
+ 
+    Shy = Shy/</span><span class="s5">2</span><span class="s1">; 
+ 
+    cleardevice(); 
+    </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+    { 
+        Py[i] = </span><span class="s4">int</span><span class="s1">(Py[i] + (Shy*Py[i])); 
+    } 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">void </span><span class="s1">polygon::reflect() 
+{ 
+    Bresenhem b; 
+    </span><span class="s4">int </span><span class="s1">i,ch,temp; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 1. About X-Axis&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 2. About Y-Axis&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 3. About Y = X&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 4. About Y = -X&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 5. About Origin&quot;</span><span class="s1">; 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter choice : &quot;</span><span class="s1">; 
+    cin&gt;&gt;ch; 
+    </span><span class="s0">//about y-axis</span><span class="s1"> 
+    </span><span class="s4">if</span><span class="s1">(ch == </span><span class="s5">2</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Px[i] = -</span><span class="s5">1 </span><span class="s1">* Px[i]; 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s0">//about x-axis</span><span class="s1"> 
+    </span><span class="s4">else if</span><span class="s1">(ch == </span><span class="s5">1</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+            Py[i] = -</span><span class="s5">1 </span><span class="s1">* Py[i]; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s0">//about y = x</span><span class="s1"> 
+    </span><span class="s4">else if</span><span class="s1">(ch == </span><span class="s5">3</span><span class="s1">) 
+    { 
+        </span><span class="s4">for </span><span class="s1">(i = </span><span class="s5">0</span><span class="s1">; i &lt; n; i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+ 
+            temp = Px[i]; 
+            Px[i] = Py[i]; 
+            Py[i] = temp; 
+ 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s0">//about y = -x</span><span class="s1"> 
+    </span><span class="s4">else if</span><span class="s1">(ch == </span><span class="s5">4</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+ 
+            temp = Px[i]; 
+            Px[i] = -Py[i]; 
+            Py[i] = -temp; 
+ 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s0">//about origin</span><span class="s1"> 
+    </span><span class="s4">else if</span><span class="s1">(ch == </span><span class="s5">5</span><span class="s1">) 
+    { 
+        </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
+        { 
+            Px[i] = Px[i] - </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] - </span><span class="s5">240</span><span class="s1">; 
+ 
+            Px[i] = -</span><span class="s5">1 </span><span class="s1">* Px[i]; 
+            Py[i] = -</span><span class="s5">1 </span><span class="s1">* Py[i]; 
+ 
+            Px[i] = Px[i] + </span><span class="s5">320</span><span class="s1">; 
+            Py[i] = Py[i] + </span><span class="s5">240</span><span class="s1">; 
+        } 
+    } 
+    </span><span class="s4">else</span><span class="s1"> 
+    { 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Axis&quot;</span><span class="s1">; 
+        </span><span class="s4">return</span><span class="s1">; 
+    } 
+    cleardevice(); 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    draw(); 
+} 
+ 
+</span><span class="s4">int </span><span class="s1">main() 
+{ 
+    </span><span class="s4">float </span><span class="s1">temp; 
+    </span><span class="s4">int </span><span class="s1">gd,gm,ch; 
+    gd = DETECT; 
+    polygon obj; 
+    Bresenhem b; 
+ 
+    initgraph(&amp;gd,&amp;gm,NULL); 
+ 
+    cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Program for 2D transformation on polygon.&quot;</span><span class="s1">; 
+ 
+    obj.read(); 
+    b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+    b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+    obj.draw(); 
+ 
+    </span><span class="s4">do</span><span class="s1"> 
+    { 
+        temp = ch = </span><span class="s5">0</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n\n</span><span class="s3">~~~~~~~~~~~~~~~~~~~~~~~~~~~~~&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 1 for Translation.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 2 for Scaling.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 3 for Rotation.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 4 to  Re-Draw.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 5 to  Fill.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 6 for X-Shear.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 7 for Y-Shear.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 8 for Reflection&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 10 to Clear Fill.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3"> 0 to  Exit.&quot;</span><span class="s1">; 
+        cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter your choice : &quot;</span><span class="s1">; 
+        cin&gt;&gt;ch; 
+        cout&lt;&lt;</span><span class="s3">&quot;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
+        </span><span class="s4">switch</span><span class="s1">(ch) 
+        { 
+            </span><span class="s4">case </span><span class="s5">1 </span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter translation factor : &quot;</span><span class="s1">; 
+                     cin&gt;&gt;temp; 
+                     obj+temp; 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">2 </span><span class="s1">: obj.scale(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">3 </span><span class="s1">: obj.rotate(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">4 </span><span class="s1">: cleardevice(); 
+                     obj.read(); 
+                     b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+                     b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+                     obj.clrFlag(); 
+                     obj.draw(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">5 </span><span class="s1">: obj.fill(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">6 </span><span class="s1">: obj.Xshear(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">7 </span><span class="s1">: obj.Yshear(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">8 </span><span class="s1">: obj.reflect(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">10 </span><span class="s1">:cleardevice(); 
+                     b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
+                     b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
+                     obj.clrFlag(); 
+                     obj.draw(); 
+                     </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">case </span><span class="s5">0 </span><span class="s1">: </span><span class="s4">break</span><span class="s1">; 
+            </span><span class="s4">default</span><span class="s1">: cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Invalid Option!&quot;</span><span class="s1">; 
+        } 
+    }</span><span class="s4">while</span><span class="s1">(ch!=</span><span class="s5">0</span><span class="s1">); 
+    closegraph(); 
+    </span><span class="s4">return </span><span class="s5">0</span><span class="s1">; 
+} 
+</span></pre>
+</body>
+</html>
