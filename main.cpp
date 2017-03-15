@@ -280,7 +280,7 @@ void polygon::rotate()
 {
 	Bresenhem b;
 	int i,temp,temp2;
-	float theta;
+	double theta;
 	char choice;
 	cout<<"\nEnter Angle of rotation (in deg.): ";
 	cin>>theta;
@@ -303,8 +303,8 @@ void polygon::rotate()
 			Py[i] = Py[i] - temp2;
 
 
-			Px[i] = (Px[i]*cos(theta)) - (Py[i]*sin(theta));
-			Py[i] = (Px[i]*sin(theta)) + (Py[i]*cos(theta));
+			Px[i] = int((Px[i]*cos(theta)) - (Py[i]*sin(theta)));
+			Py[i] = int((Px[i]*sin(theta)) + (Py[i]*cos(theta)));
 
 			Px[i] = Px[i] + temp;
 			Py[i] = Py[i] + temp2;
@@ -329,8 +329,8 @@ void polygon::rotate()
 			Px[i] = Px[i] - temp;
 			Py[i] = Py[i] - temp2;
 
-			Px[i] = (Px[i]*cos(theta)) + (Py[i]*sin(theta));
-			Py[i] = (Px[i]*sin(theta)) - (Py[i]*cos(theta));
+			Px[i] = int((Px[i]*cos(theta)) + (Py[i]*sin(theta)));
+			Py[i] = int((Px[i]*sin(theta)) - (Py[i]*cos(theta)));
 
 			Px[i] = Px[i] + temp;
 			Py[i] = Py[i] + temp2;
@@ -352,7 +352,7 @@ void polygon::rotate()
 void polygon::Xshear()
 {
 	Bresenhem b;
-	float Shx,Shy;
+	float Shx;
 	int i;
 	cout<<"\nEnter X-Shear factor :- \n";
 	cin>>Shx;
@@ -362,7 +362,7 @@ void polygon::Xshear()
 	cleardevice();
 	for(i=0;i<n;i++)
 	{
-		Px[i] = Px[i] + (Shx*Px[i]);
+		Px[i] = int(Px[i] + (Shx*Px[i]));
 	}
 	b.drawline(0,240,640,240);
 	b.drawline(320,0,320,480);

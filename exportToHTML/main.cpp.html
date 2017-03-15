@@ -301,7 +301,7 @@ main.cpp</FONT>
 { 
     Bresenhem b; 
     </span><span class="s4">int </span><span class="s1">i,temp,temp2; 
-    </span><span class="s4">float </span><span class="s1">theta; 
+    </span><span class="s4">double </span><span class="s1">theta; 
     </span><span class="s4">char </span><span class="s1">choice; 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter Angle of rotation (in deg.): &quot;</span><span class="s1">; 
     cin&gt;&gt;theta; 
@@ -324,8 +324,8 @@ main.cpp</FONT>
             Py[i] = Py[i] - temp2; 
  
  
-            Px[i] = (Px[i]*cos(theta)) - (Py[i]*sin(theta)); 
-            Py[i] = (Px[i]*sin(theta)) + (Py[i]*cos(theta)); 
+            Px[i] = </span><span class="s4">int</span><span class="s1">((Px[i]*cos(theta)) - (Py[i]*sin(theta))); 
+            Py[i] = </span><span class="s4">int</span><span class="s1">((Px[i]*sin(theta)) + (Py[i]*cos(theta))); 
  
             Px[i] = Px[i] + temp; 
             Py[i] = Py[i] + temp2; 
@@ -350,8 +350,8 @@ main.cpp</FONT>
             Px[i] = Px[i] - temp; 
             Py[i] = Py[i] - temp2; 
  
-            Px[i] = (Px[i]*cos(theta)) + (Py[i]*sin(theta)); 
-            Py[i] = (Px[i]*sin(theta)) - (Py[i]*cos(theta)); 
+            Px[i] = </span><span class="s4">int</span><span class="s1">((Px[i]*cos(theta)) + (Py[i]*sin(theta))); 
+            Py[i] = </span><span class="s4">int</span><span class="s1">((Px[i]*sin(theta)) - (Py[i]*cos(theta))); 
  
             Px[i] = Px[i] + temp; 
             Py[i] = Py[i] + temp2; 
@@ -373,7 +373,7 @@ main.cpp</FONT>
 </span><span class="s4">void </span><span class="s1">polygon::Xshear() 
 { 
     Bresenhem b; 
-    </span><span class="s4">float </span><span class="s1">Shx,Shy; 
+    </span><span class="s4">float </span><span class="s1">Shx; 
     </span><span class="s4">int </span><span class="s1">i; 
     cout&lt;&lt;</span><span class="s3">&quot;</span><span class="s4">\n</span><span class="s3">Enter X-Shear factor :- </span><span class="s4">\n</span><span class="s3">&quot;</span><span class="s1">; 
     cin&gt;&gt;Shx; 
@@ -383,7 +383,7 @@ main.cpp</FONT>
     cleardevice(); 
     </span><span class="s4">for</span><span class="s1">(i=</span><span class="s5">0</span><span class="s1">;i&lt;n;i++) 
     { 
-        Px[i] = Px[i] + (Shx*Px[i]); 
+        Px[i] = </span><span class="s4">int</span><span class="s1">(Px[i] + (Shx*Px[i])); 
     } 
     b.drawline(</span><span class="s5">0</span><span class="s1">,</span><span class="s5">240</span><span class="s1">,</span><span class="s5">640</span><span class="s1">,</span><span class="s5">240</span><span class="s1">); 
     b.drawline(</span><span class="s5">320</span><span class="s1">,</span><span class="s5">0</span><span class="s1">,</span><span class="s5">320</span><span class="s1">,</span><span class="s5">480</span><span class="s1">); 
